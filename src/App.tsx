@@ -36,13 +36,16 @@ Container.defaultProps = defaultContainerProps
 
 // Functional properties
 function TextWithNumber({
+  header,
   children,
 }: {
+  header: (num: number) => ReactNode
   children: (num: number) => ReactNode
 }) {
   const [state, setState] = useState<number>(1)
   return (
     <div>
+      {header && <h2>{header?.(state)}</h2>}
       <div>{children(state)}</div>
       <div>
         <button type='button' onClick={(e) => setState(state + 1)}>
@@ -53,6 +56,32 @@ function TextWithNumber({
   )
 }
 
+// List
+// Generic props
+function List<ListItem>({
+  items,
+  render,
+}: {
+  items: ListItem[]
+  render: (item: ListItem) => ReactNode
+}) {
+  return (
+    <div>
+      <ul>
+        {items.map((item, index) => {
+          return <li key={index}>{render(item)}</li>
+        })}
+      </ul>
+    </div>
+  )
+}
+
+// Class Components
+class MyHeader extends React.Component<{ title: ReactNode }> {
+  render() {
+    return <h1>{this.props.title}</h1>
+  }
+}
 function App() {
   return (
     <div className='App'>
@@ -61,9 +90,19 @@ function App() {
         You don't have to worry about anything at all my friend
       </HeadingWithContent>
       <Container>A kind of children you can say</Container>
-      <TextWithNumber>
+      <TextWithNumber header={() => <span>Header this is</span>}>
         {(num: number) => <div>Your lucky number for today is: {num}</div>}
       </TextWithNumber>
+      <List
+        items={['Rohit', 'Fin', 'Ferb', 'Raj']}
+        render={(item: string) => (
+          <div>
+            This is the list item from the LIST component:{' '}
+            <b>{item.toUpperCase()} </b>
+          </div>
+        )}
+      ></List>
+      <MyHeader title='This is a title from a CLASS based component' />
     </div>
   )
 }
