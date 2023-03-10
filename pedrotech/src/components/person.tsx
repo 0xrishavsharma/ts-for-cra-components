@@ -1,7 +1,15 @@
-import * as React from 'react'
+import React, { FC, useState } from 'react'
+import { PersonProps } from '../Interfaces'
 
-export interface PersonProps {}
-
-export const Person = (props: PersonProps) => {
-  return <div></div>
+const Person = ({ name, age, email, getAge }: PersonProps) => {
+  return (
+    <div>
+      <h3>{name}</h3>
+      <p>{age}</p>
+      <p>{email}</p>
+      <p>{getAge(name)}</p>
+    </div>
+  )
 }
+
+export default Person
